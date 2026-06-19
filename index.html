@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Have a Question...</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffe5ec, #ffc2d1);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .container {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            max-width: 400px;
+            position: relative;
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #4a4a4a;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .gif-container img {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            height: 80px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.1s ease, font-size 0.1s ease;
+        }
+
+        #yesBtn {
+            background-color: #38b000;
+            color: white;
+            box-shadow: 0 4px 15px rgba(56, 176, 0, 0.4);
+        }
+
+        #noBtn {
+            background-color: #ff4d6d;
+            color: white;
+            position: absolute;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainContainer">
+        <!-- Cute GIF/Image placeholder -->
+        <div class="gif-container">
+            <img id="displayImg" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWdtcnZnd3N6ZXBrZms1eW94b3Rrem95ZXA4Z3M0OHFwZ3BvN3Z6ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute bear">
+        </div>
+        
+        <h1 id="questionText">Will you go out on a date with me?</h1>
+        <p id="subText">I promise it'll be fun! 😊</p>
+
+        <div class="btn-container">
+            <button id="yesBtn" onclick="celebrate()">Yes!</button>
+            <button id="noBtn" onmouseover="moveNoButton()" onclick="moveNoButton()">No</button>
+        </div>
+    </div>
+
+    <script>
+        let yesScale = 1;
+        let noClicks = 0;
+
+        // Array of playful texts when they try to click "No"
+        const phrases = [
+            "Are you sure? 🤔",
+            "Think again! 🐻",
+            "Plese? 🥺",
+            "I'll buy you food! 🍕",
+            "Don't do this to me... 💔"
+        ];
+
+        function moveNoButton() {
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            const subText = document.getElementById('subText');
+            
+            // Make the No button run away to a random position
+            // Staying within safe bounds of the screen
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40) + 20;
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40) + 20;
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+
+            // Make the Yes button bigger and change text
+            yesScale += 0.2;
+            yesBtn.style.transform = `scale(${yesScale})`;
+            
+            if (noClicks < phrases.length) {
+                subText.innerText = phrases[noClicks];
+            } else {
+                subText.innerText = "Just click Yes already! 😂";
+            }
+            noClicks++;
+        }
+
+        function celebrate() {
+            const container = document.getElementById('mainContainer');
+            // Change the content to a success message
+            container.innerHTML = `
+                <div class="gif-container">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZndnM2ZzZ4d3Y0M2M1cmN4Nm1mdmsycXN5cjZ0N3RtcWp4Ym1reSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/TdfyKrN7HGTIY/giphy.gif" alt="Celebration">
+                </div>
+                <h1 style="color: #38b000;">Yayyy! 🎉</h1>
+                <p style="font-size: 1.2rem; font-weight: bold;">It's a date! I'll text you the details. ❤️</p>
+            `;
+            
+            // Add a little confetti effect directly to the body background
+            document.body.style.background = "linear-gradient(135deg, #d8f3dc, #b7e4c7)";
+        }
+    </script>
+</body>
+</html>
