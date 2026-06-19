@@ -3,103 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I Have a Question...</title>
+    <title>A Special Question For You 🐱🌸</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ffe5ec, #ffc2d1);
-            height: 100vh;
+            background: linear-gradient(135deg, #fff0f3, #ffccd5);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 0;
-            overflow: hidden;
-            text-align: center;
+            overflow-x: hidden;
         }
 
-        .container {
-            background: white;
-            padding: 30px 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            max-width: 400px;
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.15);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
             position: relative;
+            border: 2px solid #ffb3c1;
+            display: none; /* Controlled by JS */
+        }
+
+        .card.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
             color: #ff4d6d;
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
         }
 
         p {
-            color: #4a4a4a;
-            font-size: 1.1rem;
-            margin-bottom: 30px;
+            color: #5c5457;
+            font-size: 1.05rem;
+            line-height: 1.5;
         }
 
-        .gif-container img {
-            width: 150px;
-            height: 150px;
-            margin-bottom: 20px;
-            border-radius: 10px;
+        /* Polaroid / Image Styling */
+        .polaroid {
+            background: white;
+            padding: 10px 10px 25px 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+            margin: 0 auto 20px auto;
+            max-width: 280px;
+            transform: rotate(-2deg);
         }
 
+        .polaroid img {
+            width: 100%;
+            border-radius: 4px;
+        }
+
+        /* Decorative Cat & Flower Elements */
+        .decorations {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        /* Buttons */
         .btn-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
+            margin-top: 25px;
             height: 80px;
+            position: relative;
         }
 
         button {
-            padding: 12px 25px;
+            padding: 12px 28px;
             font-size: 1.1rem;
             font-weight: bold;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.1s ease, font-size 0.1s ease;
+            transition: all 0.2s ease;
+        }
+
+        .btn-next {
+            background-color: #ff4d6d;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+        }
+
+        .btn-next:hover {
+            background-color: #ff758f;
+            transform: scale(1.05);
         }
 
         #yesBtn {
-            background-color: #38b000;
+            background-color: #c1121f;
             color: white;
-            box-shadow: 0 4px 15px rgba(56, 176, 0, 0.4);
+            box-shadow: 0 4px 15px rgba(193, 18, 31, 0.3);
         }
 
         #noBtn {
-            background-color: #ff4d6d;
+            background-color: #780000;
             color: white;
             position: absolute;
-            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+            box-shadow: 0 4px 15px rgba(120, 0, 0, 0.3);
+        }
+
+        /* Option selection cards */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .option-card {
+            background: #fff0f3;
+            border: 2px solid #ffccd5;
+            padding: 20px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #ff4d6d;
+            transition: all 0.2s ease;
+        }
+
+        .option-card:hover {
+            background: #ffccd5;
+            transform: translateY(-3px);
+        }
+
+        .option-card.selected {
+            background: #ff4d6d;
+            color: white;
+            border-color: #ff758f;
+        }
+
+        /* Summary Dashboard */
+        .summary-box {
+            background: #fff0f3;
+            border: 2px dashed #ff4d6d;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .summary-item {
+            margin: 8px 0;
+            font-size: 1.05rem;
+            color: #5c5457;
         }
     </style>
 </head>
 <body>
 
-    <div class="container" id="mainContainer">
-        <!-- Cute GIF/Image placeholder -->
-        <div class="gif-container">
-            <img id="displayImg" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWdtcnZnd3N6ZXBrZms1eW94b3Rrem95ZXA4Z3M0OHFwZ3BvN3Z6ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute bear">
-        </div>
+    <!-- SLIDE 1: LANDING PAGE -->
+    <div class="card active" id="slide1">
+        <div class="decorations">🐱🌸🐱🌸</div>
+        <h1>Will you go on a date with me?</h1>
         
-        <h1 id="questionText">Will you go out on a date with me?</h1>
-        <p id="subText">I promise it'll be fun! 😊</p>
+        <!-- Polaroid frame referencing the lovely archway scene from watermarked_img_376326690020028772.png -->
+        <div class="polaroid">
+            <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=600&auto=format&fit=crop" alt="Beautiful date archway">
+            <p id="subText" style="margin: 5px 0 0 0; font-family: 'Courier New', Courier, monospace; font-size: 0.9rem;">Picture us here? ✨</p>
+        </div>
 
         <div class="btn-container">
-            <button id="yesBtn" onclick="celebrate()">Yes!</button>
+            <button id="yesBtn" onclick="nextSlide(2)">Yes</button>
             <button id="noBtn" onmouseover="moveNoButton()" onclick="moveNoButton()">No</button>
         </div>
+    </div>
+
+    <!-- SLIDE 2: CELEBRATION -->
+    <div class="card" id="slide2">
+        <div class="decorations">😻🎉🌸🎉😻</div>
+        <h1>I love you!</h1>
+        <p style="font-size: 1.3rem; font-weight: bold; color: #ff4d6d;">Yay, it’s a date!</p>
+        <p>Prepare to get absolutely volited! 🚀🔥</p>
+        <div class="btn-container" style="height: auto;">
+            <button class="btn-next" onclick="nextSlide(3)">Let's plan it! ➔</button>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: ACTIVITY 1 CHOICE -->
+    <div class="card" id="slide3">
+        <div class="decorations">🏎️ 🌸 🧩</div>
+        <h1>Pick our first adventure:</h1>
+        <p>What sounds like the most fun to kick things off?</p>
+        
+        <div class="options-grid">
+            <div class="option-card" onclick="selectOption('act1', 'Go-Karting', this)">Go-Karting 🏎️</div>
+            <div class="option-card" onclick="selectOption('act1', 'an Escape Room', this)">Escape Room 🧩</div>
+        </div>
+
+        <div class="btn-container" style="height: auto;">
+            <button class="btn-next" id="nextToSlide4" onclick="nextSlide(4)" disabled style="opacity: 0.5; cursor: not-allowed;">Next ➔</button>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: ACTIVITY 2 CHOICE -->
+    <div class="card" id="slide4">
+        <div class="decorations">🧺 🌸 🛶</div>
+        <h1>Pick our next activity:</h1>
+        <p>How should we spend the afternoon?</p>
+        
+        <div class="options-grid">
+            <div class="option-card" onclick="selectOption('act2', 'a Picnic with Volleyball', this)">Picnic & Volleyball 🧺🏐</div>
+            <div class="option-card" onclick="selectOption('act2', 'Kayaking', this)">Kayaking 🛶</div>
+        </div>
+
+        <div class="btn-container" style="height: auto;">
+            <button class="btn-next" id="nextToSlide5" onclick="buildFinalSummary(); nextSlide(5);" disabled style="opacity: 0.5; cursor: not-allowed;">See our itinerary! ➔</button>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: FINAL DETAILS -->
+    <div class="card" id="slide5">
+        <div class="decorations">🐾🍦🌸🍦🐾</div>
+        <h1>It's Official! 🔒❤️</h1>
+        <p>We are going to have the absolute best time ever.</p>
+        
+        <div class="summary-box">
+            <div class="summary-item">📅 <strong>Date:</strong> June 21st</div>
+            <div class="summary-item">⏰ <strong>Time:</strong> 12:00 PM</div>
+            <div class="summary-item">✨ <strong>Plan:</strong> We'll do <span id="summaryAct1" style="color:#ff4d6d; font-weight:bold;">---</span>, followed by <span id="summaryAct2" style="color:#ff4d6d; font-weight:bold;">---</span>.</div>
+            <div class="summary-item">🍦 <strong>Grand Finale:</strong> Finishing up with sweet Ice Cream! 🍨</div>
+        </div>
+
+        <p style="font-weight: bold; color: #ff4d6d;">Can't wait to see you! 🥰</p>
     </div>
 
     <script>
         let yesScale = 1;
         let noClicks = 0;
-
-        // Array of playful texts when they try to click "No"
+        
+        // Custom runaway phrases
         const phrases = [
             "Are you sure? 🤔",
             "Think again! 🐻",
@@ -108,13 +256,18 @@
             "Don't do this to me... 💔"
         ];
 
+        // Selections object
+        let itinerary = {
+            act1: '',
+            act2: ''
+        };
+
         function moveNoButton() {
             const noBtn = document.getElementById('noBtn');
             const yesBtn = document.getElementById('yesBtn');
             const subText = document.getElementById('subText');
             
-            // Make the No button run away to a random position
-            // Staying within safe bounds of the screen
+            // Teleport button within safe screen boundaries
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40) + 20;
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40) + 20;
             
@@ -122,31 +275,54 @@
             noBtn.style.left = x + 'px';
             noBtn.style.top = y + 'px';
 
-            // Make the Yes button bigger and change text
-            yesScale += 0.2;
+            // Grow the Yes button
+            yesScale += 0.25;
             yesBtn.style.transform = `scale(${yesScale})`;
             
+            // Cycle through text warnings
             if (noClicks < phrases.length) {
                 subText.innerText = phrases[noClicks];
             } else {
-                subText.innerText = "Just click Yes already! 😂";
+                subText.innerText = "Just click Yes already! 😂🌸";
             }
             noClicks++;
         }
 
-        function celebrate() {
-            const container = document.getElementById('mainContainer');
-            // Change the content to a success message
-            container.innerHTML = `
-                <div class="gif-container">
-                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZndnM2ZzZ4d3Y0M2M1cmN4Nm1mdmsycXN5cjZ0N3RtcWp4Ym1reSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/TdfyKrN7HGTIY/giphy.gif" alt="Celebration">
-                </div>
-                <h1 style="color: #38b000;">Yayyy! 🎉</h1>
-                <p style="font-size: 1.2rem; font-weight: bold;">It's a date! I'll text you the details. ❤️</p>
-            `;
+        function nextSlide(slideNumber) {
+            // Hide all cards
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.remove('active');
+            });
+            // Show destination card
+            document.getElementById('slide' + slideNumber).classList.add('active');
+        }
+
+        function selectOption(step, choice, element) {
+            // Unselect sibling options in the same grid
+            const siblings = element.parentElement.querySelectorAll('.option-card');
+            siblings.forEach(sib => sib.classList.remove('selected'));
             
-            // Add a little confetti effect directly to the body background
-            document.body.style.background = "linear-gradient(135deg, #d8f3dc, #b7e4c7)";
+            // Select clicked option
+            element.classList.add('selected');
+            itinerary[step] = choice;
+
+            // Enable next button
+            if (step === 'act1') {
+                const btn = document.getElementById('nextToSlide4');
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
+            } else if (step === 'act2') {
+                const btn = document.getElementById('nextToSlide5');
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
+            }
+        }
+
+        function buildFinalSummary() {
+            document.getElementById('summaryAct1').innerText = itinerary.act1;
+            document.getElementById('summaryAct2').innerText = itinerary.act2;
         }
     </script>
 </body>
